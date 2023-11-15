@@ -1,0 +1,5 @@
+.idea
+bitcoin-core
+www
+*.iml
+*.db

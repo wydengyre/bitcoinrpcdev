@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="date" content="{{.DateTime}}">
+    <title>Bitcoin Core {{.Version}} RPC: {{.Name}}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css">
+</head>
+<body>
+<header>
+    <hgroup>
+        <h1>{{.Name}} (<a href="../">{{.Section}}</a> command)</h1>
+        <h2>Bitcoin Core <a href="../../">{{.Version}}</a> RPC</h2>
+    </hgroup>
+</header>
+<main>
+    <pre style="white-space: pre-wrap">{{.Description}}</pre>
+</main>
+{{template `footer` .}}
+</body>
+</html>

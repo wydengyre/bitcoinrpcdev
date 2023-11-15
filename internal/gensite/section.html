@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitcoin Core {{.Version}} RPC: {{.Name}}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css">
+</head>
+<body>
+<header>
+    <hgroup>
+        <h1>Bitcoin Core {{.Name}} commands</h1>
+        <h2>Bitcoin Core <a href="../">{{.Version}}</a> RPC</h2>
+    </hgroup>
+</header>
+<main>
+    <ul>
+        {{range $command := .Commands}}
+        <li><a href="{{$command}}/">{{$command}}</a></li>
+        {{end}}
+    </ul>
+</main>
+{{template `footer` .}}
+</body>
+</html>
