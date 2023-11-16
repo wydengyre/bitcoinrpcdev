@@ -5,13 +5,14 @@
     {{.headTags}}
 </head>
 <body>
-<header>
+{{template `nav`}}
+<header class="container">
     <hgroup>
         <h1>Bitcoin Core {{.Name}} commands</h1>
         <h2>Bitcoin Core <a href="../">{{.Version}}</a> RPC</h2>
     </hgroup>
 </header>
-<main>
+<main class="container">
     <ul>
         {{range $command := .Commands}}
         <li><a href="{{$command}}/">{{$command}}</a></li>

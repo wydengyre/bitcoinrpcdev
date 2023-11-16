@@ -9,13 +9,16 @@ import (
 	"time"
 )
 
-//go:embed pico.classless.min.css
+//go:embed pico.min.css
 var css string
 
 type btcTemplate template.Template
 
 func mustBtcTemplate(name string, content string) *btcTemplate {
-	return (*btcTemplate)(mustAddFooter(template.New(name).Parse(content)))
+	return (*btcTemplate)(
+		mustAddFooter(
+			mustAddNav(
+				template.Must(template.New(name).Parse(content)))))
 }
 
 var style = template.HTML(fmt.Sprintf(`<style>%s</style>`, css))

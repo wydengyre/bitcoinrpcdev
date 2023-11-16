@@ -5,10 +5,11 @@
     {{.headTags}}
 </head>
 <body>
-<header>
+{{template `nav`}}
+<header class="container">
 <h1>Bitcoin Core {{.Version.Name}} RPC</h1>
 </header>
-<main>
+<main class="container">
 {{range $section := .SectionsAlpha}}
     <h2>{{$section}} commands</h2>
     <ul>

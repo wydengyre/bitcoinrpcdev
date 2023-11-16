@@ -1,10 +1,10 @@
 package gensite
 
 import (
+	_ "embed"
 	"github.com/go-git/go-git/v5"
 	"html/template"
 )
-import _ "embed"
 
 //go:embed footer.html
 var footerHtml string
@@ -13,8 +13,7 @@ var gitRepo = mustGetGitRepo()
 var gitHash = mustGetGitHash()
 var gitModified = mustGetGitModified()
 
-func mustAddFooter(t *template.Template, err error) *template.Template {
-	template.Must(t, err)
+func mustAddFooter(t *template.Template) *template.Template {
 	template.Must(addFooter(t))
 	return t
 }

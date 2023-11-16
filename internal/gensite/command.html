@@ -5,13 +5,14 @@
     {{.headTags}}
 </head>
 <body>
-<header>
+{{template `nav`}}
+<header class="container">
     <hgroup>
         <h1>{{.Name}} (<a href="../">{{.Section}}</a> command)</h1>
         <h2>Bitcoin Core <a href="../../">{{.Version}}</a> RPC</h2>
     </hgroup>
 </header>
-<main>
+<main class="container">
     <pre style="white-space: pre-wrap">{{.Description}}</pre>
 </main>
 {{template `footer` .}}

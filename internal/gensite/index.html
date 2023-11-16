@@ -5,10 +5,11 @@
     {{.headTags}}
 </head>
 <body>
-<header>
+{{template `nav`}}
+<header class="container">
     <h1>Bitcoin Core RPC</h1>
 </header>
-<main>
+<main class="container">
   <ul>
     <li>Latest: <a href="/{{.Latest}}">{{.Latest}}</a></li>
     {{range $version := .Versions}}
