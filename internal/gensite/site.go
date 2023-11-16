@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/tdewolff/minify/v2"
 	"github.com/tdewolff/minify/v2/html"
+	"log/slog"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -33,6 +34,7 @@ func newSite() site {
 
 // add adds an html file to the site
 func (s site) add(path string, hr htmler) error {
+	slog.Debug("adding", "path", path)
 	h, err := hr.html()
 	if err != nil {
 		return fmt.Errorf("failed to render html: %w", err)
@@ -61,6 +63,7 @@ func addCanonicalUrl(html []byte, path string) ([]byte, error) {
 
 // write writes the site to the filesystem
 func (s site) write(rootPath string) error {
+	slog.Info("writing site", "rootPath", rootPath)
 	for path, content := range s {
 		outPath := filepath.Join(rootPath, path)
 		outDir := filepath.Dir(outPath)
@@ -74,6 +77,7 @@ func (s site) write(rootPath string) error {
 		if err != nil {
 			return fmt.Errorf("failed to write file %s: %w", outPath, err)
 		}
+		slog.Info("wrote", "path", outPath)
 	}
 	return nil
 }
