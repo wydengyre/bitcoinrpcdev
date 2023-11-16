@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/tdewolff/minify/v2"
 	"github.com/tdewolff/minify/v2/html"
+	"slices"
 )
 
 const mimeHtml = "text/html"
@@ -58,6 +59,16 @@ func Gen(db []byte, webPath string) error {
 		}
 	}
 
+	idx := &index{}
+	idx.Latest, idx.Versions, err = versionsDescending(rpcDb)
+	if err != nil {
+		return fmt.Errorf("failed to get versions: %w", err)
+	}
+	err = site.add("index.html", idx)
+	if err != nil {
+		return fmt.Errorf("failed to add index to site: %w", err)
+	}
+
 	err = site.write(webPath)
 	if err != nil {
 		return fmt.Errorf("failed to write site: %w", err)
@@ -81,6 +92,25 @@ func cmdNamesBySection(commands map[string][]bitcoind.Command) map[string][]stri
 		}
 	}
 	return sections
+}
+
+func versionsDescending(db bitcoind.RpcDb) (string, []string, error) {
+	if len(db) < 1 {
+		return "", nil, fmt.Errorf("empty database")
+	}
+	versions := make([]bitcoind.ReleaseVersion, 0, len(db))
+	for v := range db {
+		versions = append(versions, v)
+	}
+	slices.SortFunc(versions, func(a, b bitcoind.ReleaseVersion) int {
+		return -a.Cmp(b)
+	})
+	latest := versions[0].String()
+	other := make([]string, len(versions)-1)
+	for i, v := range versions[1:] {
+		other[i] = v.String()
+	}
+	return latest, other, nil
 }
 
 func minifyHtml(html []byte) ([]byte, error) {

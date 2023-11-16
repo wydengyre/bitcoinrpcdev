@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bitcoin Core RPC</title>
+    {{.headTags}}
+</head>
+<body>
+<header>
+    <h1>Bitcoin Core RPC</h1>
+</header>
+<main>
+  <ul>
+    <li>Latest: <a href="/{{.Latest}}">{{.Latest}}</a></li>
+    {{range $version := .Versions}}
+    <li><a href="/{{$version}}/">{{$version}}</a></li>
+    {{end}}
+  </ul>
+</main>
+{{template `footer` .}}
+</body>
+</html>

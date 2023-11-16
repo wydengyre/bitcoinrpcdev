@@ -19,13 +19,14 @@ func mustBtcTemplate(name string, content string) *btcTemplate {
 }
 
 var style = template.HTML(fmt.Sprintf(`<style>%s</style>`, css))
+var headTags = `<meta charset="utf-8" />` + style
 
 func (t *btcTemplate) render(d interface{}) ([]byte, error) {
 	m, ok := d.(map[string]interface{})
 	if !ok {
 		m = structToMap(d)
 	}
-	m["style"] = style
+	m["headTags"] = headTags
 	m["datetime"] = nowStr()
 	var buf bytes.Buffer
 	err := (*template.Template)(t).Execute(&buf, m)

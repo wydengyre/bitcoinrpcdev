@@ -25,6 +25,16 @@ func (v ReleaseVersion) String() string {
 	return fmt.Sprintf("%d.%d", v.Major, v.Minor)
 }
 
+func (v ReleaseVersion) Cmp(other ReleaseVersion) int {
+	if v.Major != other.Major {
+		return int(v.Major - other.Major)
+	}
+	if v.Minor != other.Minor {
+		return int(v.Minor - other.Minor)
+	}
+	return int(v.Patch - other.Patch)
+}
+
 func CreateDb(daemonPath string) ([]byte, error) {
 	rpcDb, err := mkDb(daemonPath)
 	if err != nil {
