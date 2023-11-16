@@ -3,6 +3,7 @@
 copy-css:
     cp node_modules/@picocss/pico/css/pico.min.css internal/gensite
 
+# run createdb within docker and copy out the produced DB. Very handy on MacOS.
 createdb-dev:
     docker build -t bitcoinrpc .
     docker rm -f bitcoinrpc || true
