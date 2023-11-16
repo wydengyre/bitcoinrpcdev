@@ -4,25 +4,41 @@ go 1.21
 
 require (
 	github.com/btcsuite/btcd v0.23.4
+	github.com/go-git/go-git/v5 v5.10.0
 	github.com/panjf2000/ants/v2 v2.8.2
-	github.com/stretchr/testify v1.8.2
-	golang.org/x/net v0.0.0-20201021035429-f5854403a974
+	github.com/tdewolff/minify/v2 v2.20.6
+	golang.org/x/net v0.17.0
 )
 
 require (
+	dario.cat/mergo v1.0.0 // indirect
+	github.com/Microsoft/go-winio v0.6.1 // indirect
+	github.com/ProtonMail/go-crypto v0.0.0-20230828082145-3c4c8a2d2371 // indirect
+	github.com/acomagu/bufpipe v1.0.4 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.1.3 // indirect
 	github.com/btcsuite/btcd/btcutil v1.1.0 // indirect
 	github.com/btcsuite/btcd/chaincfg/chainhash v1.0.1 // indirect
 	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f // indirect
 	github.com/btcsuite/go-socks v0.0.0-20170105172521-4720035b7bfd // indirect
 	github.com/btcsuite/websocket v0.0.0-20150119174127-31079b680792 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/cloudflare/circl v1.3.3 // indirect
+	github.com/cyphar/filepath-securejoin v0.2.4 // indirect
 	github.com/decred/dcrd/crypto/blake256 v1.0.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/tdewolff/minify/v2 v2.20.6 // indirect
+	github.com/emirpasic/gods v1.18.1 // indirect
+	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
+	github.com/go-git/go-billy/v5 v5.5.0 // indirect
+	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
+	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
+	github.com/kevinburke/ssh_config v1.2.0 // indirect
+	github.com/pjbgf/sha1cd v0.3.0 // indirect
+	github.com/sergi/go-diff v1.1.0 // indirect
+	github.com/skeema/knownhosts v1.2.0 // indirect
 	github.com/tdewolff/parse/v2 v2.7.4 // indirect
-	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
+	github.com/xanzy/ssh-agent v0.3.3 // indirect
+	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
+	golang.org/x/tools v0.13.0 // indirect
+	gopkg.in/warnings.v0 v0.1.2 // indirect
 )

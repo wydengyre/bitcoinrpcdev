@@ -27,7 +27,7 @@ func (t *btcTemplate) render(d interface{}) ([]byte, error) {
 		m = structToMap(d)
 	}
 	m["headTags"] = headTags
-	m["datetime"] = nowStr()
+	addFooterData(m)
 	var buf bytes.Buffer
 	err := (*template.Template)(t).Execute(&buf, m)
 	if err != nil {
