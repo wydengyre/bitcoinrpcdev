@@ -1,5 +1,6 @@
 .idea
 bitcoin-core
 www
+node_modules
 *.iml
 *.db
