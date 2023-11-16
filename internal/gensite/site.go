@@ -1,7 +1,9 @@
 package gensite
 
 import (
+	"bytes"
 	"fmt"
+	"net/url"
 	"os"
 	"path/filepath"
 )
@@ -12,6 +14,8 @@ type site map[string][]byte
 type htmler interface {
 	html() ([]byte, error)
 }
+
+const canonicalHome = `https://bitcoinrpc.dev/`
 
 // newFs creates a new site
 func newSite() site {
@@ -24,12 +28,26 @@ func (s site) add(path string, hr htmler) error {
 	if err != nil {
 		return fmt.Errorf("failed to render html: %w", err)
 	}
-	mh, err := minifyHtml(h)
+	ch, err := addCanonicalUrl(h, path)
+	if err != nil {
+		return fmt.Errorf("failed to add canonical url: %w", err)
+	}
+	mh, err := minifyHtml(ch)
 	if err != nil {
 		return fmt.Errorf("failed to minify html: %w", err)
 	}
 	s[path] = mh
 	return nil
+}
+
+func addCanonicalUrl(html []byte, path string) ([]byte, error) {
+	canonicalUrl, err := url.JoinPath(canonicalHome, path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to join canonical url: %w", err)
+	}
+	tag := fmt.Sprintf(`<link rel="canonical" href="%s">`, canonicalUrl)
+	out := bytes.Replace(html, []byte(`</head>`), []byte(tag+`</head>`), 1)
+	return out, nil
 }
 
 // write writes the site to the filesystem
