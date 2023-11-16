@@ -21,8 +21,11 @@ func mustBtcTemplate(name string, content string) *btcTemplate {
 				template.Must(template.New(name).Parse(content)))))
 }
 
+const charsetTag = `<meta charset="utf-8" />`
+const viewportTag = `<meta name="viewport" content="width=device-width, initial-scale=1">`
+
 var style = template.HTML(fmt.Sprintf(`<style>%s</style>`, css))
-var headTags = `<meta charset="utf-8" />` + style
+var headTags = charsetTag + viewportTag + style
 
 func (t *btcTemplate) render(d interface{}) ([]byte, error) {
 	m, ok := d.(map[string]interface{})
