@@ -3,18 +3,8 @@ package gensite
 import (
 	"bitcoinrpcschema/internal/bitcoind"
 	"fmt"
-	"github.com/tdewolff/minify/v2"
-	"github.com/tdewolff/minify/v2/html"
 	"slices"
 )
-
-const mimeHtml = "text/html"
-
-var m = minify.New()
-
-func init() {
-	m.AddFunc(mimeHtml, html.Minify)
-}
 
 func Gen(db []byte, webPath string) error {
 	rpcDb, err := bitcoind.ReadDb(db)
@@ -111,8 +101,4 @@ func versionsDescending(db bitcoind.RpcDb) (string, []string, error) {
 		other[i] = v.String()
 	}
 	return latest, other, nil
-}
-
-func minifyHtml(html []byte) ([]byte, error) {
-	return m.Bytes(mimeHtml, html)
 }

@@ -3,10 +3,15 @@ package gensite
 import (
 	"bytes"
 	"fmt"
+	"github.com/tdewolff/minify/v2"
+	"github.com/tdewolff/minify/v2/html"
 	"net/url"
 	"os"
 	"path/filepath"
 )
+
+const canonicalHome = `https://bitcoinrpc.dev/`
+const mimeHtml = "text/html"
 
 // site is a map of page paths to page contents
 type site map[string][]byte
@@ -15,7 +20,11 @@ type htmler interface {
 	html() ([]byte, error)
 }
 
-const canonicalHome = `https://bitcoinrpc.dev/`
+var m = minify.New()
+
+func init() {
+	m.AddFunc(mimeHtml, html.Minify)
+}
 
 // newFs creates a new site
 func newSite() site {
@@ -67,4 +76,8 @@ func (s site) write(rootPath string) error {
 		}
 	}
 	return nil
+}
+
+func minifyHtml(html []byte) ([]byte, error) {
+	return m.Bytes(mimeHtml, html)
 }
