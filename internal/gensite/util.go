@@ -2,10 +2,15 @@ package gensite
 
 import (
 	"bytes"
+	_ "embed"
+	"fmt"
 	"html/template"
 	"reflect"
 	"time"
 )
+
+//go:embed pico.classless.min.css
+var css string
 
 type btcTemplate template.Template
 
@@ -13,12 +18,15 @@ func mustBtcTemplate(name string, content string) *btcTemplate {
 	return (*btcTemplate)(mustAddFooter(template.New(name).Parse(content)))
 }
 
+var style = template.HTML(fmt.Sprintf(`<style>%s</style>`, css))
+
 func (t *btcTemplate) render(d interface{}) ([]byte, error) {
 	m, ok := d.(map[string]interface{})
 	if !ok {
 		m = structToMap(d)
 	}
-	m["DateTime"] = nowStr()
+	m["style"] = style
+	m["datetime"] = nowStr()
 	var buf bytes.Buffer
 	err := (*template.Template)(t).Execute(&buf, m)
 	if err != nil {
