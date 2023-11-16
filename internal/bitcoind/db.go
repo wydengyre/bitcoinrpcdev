@@ -41,10 +41,13 @@ func CreateDb(daemonPath string) ([]byte, error) {
 		e := fmt.Errorf("error getting commands: %v", err)
 		return nil, e
 	}
+	return rpcDb.Marshal()
+}
 
+func (db RpcDb) Marshal() ([]byte, error) {
 	var b bytes.Buffer
 	enc := gob.NewEncoder(&b)
-	err = enc.Encode(rpcDb)
+	err := enc.Encode(db)
 	if err != nil {
 		e := fmt.Errorf("error encoding commands: %v", err)
 		return nil, e

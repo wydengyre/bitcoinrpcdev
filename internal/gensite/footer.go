@@ -30,7 +30,8 @@ func addFooterData(m map[string]interface{}) {
 }
 
 func mustGetGitRepo() *git.Repository {
-	h, err := git.PlainOpen(".")
+	options := git.PlainOpenOptions{DetectDotGit: true}
+	h, err := git.PlainOpenWithOptions(".", &options)
 	if err != nil {
 		panic(err)
 	}
