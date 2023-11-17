@@ -10,6 +10,9 @@ createdb-dev:
     docker run --name bitcoinrpc bitcoinrpc
     docker cp bitcoinrpc:/app/rpc.db .
 
+test:
+    go test -v ./internal/...
+
 update:
     go get -u
     go mod tidy -v
