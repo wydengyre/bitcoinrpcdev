@@ -3,12 +3,17 @@ package gensite_test
 import (
 	"bitcoinrpcschema/internal/bitcoind"
 	"bitcoinrpcschema/internal/gensite"
+	"bytes"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"golang.org/x/net/html"
 	"log/slog"
+	"net/url"
 	"os"
 	"path/filepath"
 	"slices"
+	"strings"
 	"testing"
 )
 
@@ -100,10 +105,71 @@ func TestGeneratedPages(t *testing.T) {
 	assert.Equal(t, expected, generated)
 }
 
-// test that all generated pages are reachable
+func TestGeneratedPagesReachable(t *testing.T) {
+	req := require.New(t)
+	remainingPages := make(map[string]struct{}, len(generatedSite))
+	for path := range generatedSite {
+		remainingPages[path] = struct{}{}
+	}
 
-// test that all relative links can resolve
+	var visitLinks func(path string)
+	visitLinks = func(path string) {
+		_, ok := remainingPages[path]
+		if !ok {
+			return
+		}
+		delete(remainingPages, path)
+		page, ok := generatedSite[path]
+		req.Truef(ok, "missing page %s, this should be impossible", path)
+		links, err := relativeLinks(page)
+		req.NoError(err)
+		for _, link := range links {
+			var nextPath string
+			var err error
+			if link[0] == '/' {
+				nextPath, err = url.JoinPath(link, "index.html")
+			} else if strings.HasSuffix(link, ".html") {
+				nextPath, err = url.JoinPath(filepath.Dir(path), link)
+			} else {
+				nextPath, err = url.JoinPath(filepath.Dir(path), link, "index.html")
+			}
+			req.NoError(err)
+			if nextPath[0] == '/' {
+				nextPath = nextPath[1:]
+			}
+			visitLinks(nextPath)
+		}
+	}
+	visitLinks("index.html")
 
+	assert.Empty(t, remainingPages, "not all pages reachable")
+}
+
+func relativeLinks(h []byte) ([]string, error) {
+	doc, err := html.Parse(bytes.NewReader(h))
+	if err != nil {
+		return nil, err
+	}
+
+	var links []string
+	var f func(*html.Node)
+	f = func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "a" {
+			for _, a := range n.Attr {
+				if a.Key == "href" && !strings.HasPrefix(a.Val, "http://") && !strings.HasPrefix(a.Val, "https://") {
+					links = append(links, a.Val)
+				}
+			}
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			f(c)
+		}
+	}
+	f(doc)
+	return links, nil
+}
+
+// readSite reads the site from the given path and returns a map of the path to the contents of the file
 func readSite(path string) (map[string][]byte, error) {
 	site := make(map[string][]byte)
 
