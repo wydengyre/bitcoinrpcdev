@@ -38,7 +38,7 @@ func (v ReleaseVersion) Cmp(other ReleaseVersion) int {
 func CreateDb(daemonPath string) ([]byte, error) {
 	rpcDb, err := mkDb(daemonPath)
 	if err != nil {
-		e := fmt.Errorf("error getting commands: %v", err)
+		e := fmt.Errorf("error getting commands for daemon %s: %v", daemonPath, err)
 		return nil, e
 	}
 	return rpcDb.Marshal()
@@ -87,7 +87,11 @@ func mkDb(daemonPath string) (RpcDb, error) {
 
 func getRpcInfo(versionPath string) (ReleaseVersion, map[string][]Command, error) {
 	bitcoindPath := path.Join(versionPath, "bin", "bitcoind")
-	return GetDaemonCommands(bitcoindPath)
+	rv, cmds, err := GetDaemonCommands(bitcoindPath)
+	if err != nil {
+		err = fmt.Errorf("error getting RPC info for bitcoind %s: %w", bitcoindPath, err)
+	}
+	return rv, cmds, err
 }
 
 func GetDaemonCommands(bitcoindPath string) (ReleaseVersion, map[string][]Command, error) {
@@ -100,13 +104,13 @@ func GetDaemonCommands(bitcoindPath string) (ReleaseVersion, map[string][]Comman
 
 	v, err := getVersion(c)
 	if err != nil {
-		e := fmt.Errorf("error getting version: %w", err)
+		e := fmt.Errorf("error getting version for bitcoind %s: %w", bitcoindPath, err)
 		return ReleaseVersion{}, nil, e
 	}
 
 	cmds, err := getCommandHelps(c)
 	if err != nil {
-		e := fmt.Errorf("error getting commands: %w", err)
+		e := fmt.Errorf("error getting commands for bitcoind %s: %w", bitcoindPath, err)
 		return ReleaseVersion{}, nil, e
 	}
 	return v, cmds, nil

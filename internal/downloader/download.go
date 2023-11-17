@@ -179,6 +179,8 @@ func (e errorNotFound) Error() string {
 	return "not found: " + e.release
 }
 
+var bitcoindPathRe = regexp.MustCompile(`^bitcoin-\d+\.\d+(?:\.\d+)?/bin/bitcoind$`)
+
 func downloadRelease(rootPath string, version releaseVersion) error {
 	plat := "x86_64-linux-gnu"
 	if runtime.GOARCH == "arm64" {
@@ -207,7 +209,6 @@ func downloadRelease(rootPath string, version releaseVersion) error {
 
 	tarReader := tar.NewReader(gzReader)
 
-	// TODO: consider only uncompressing bitcoind
 	for {
 		header, err := tarReader.Next()
 		if err == io.EOF {
@@ -216,6 +217,12 @@ func downloadRelease(rootPath string, version releaseVersion) error {
 		if err != nil {
 			return fmt.Errorf("error reading tar file: %w", err)
 		}
+
+		if !bitcoindPathRe.MatchString(header.Name) {
+			continue
+		}
+
+		fmt.Println("uncompressing " + header.Name)
 
 		filePath := fmt.Sprintf("%s/%s", rootPath, header.Name)
 		dirPath := filePath
