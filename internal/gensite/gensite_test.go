@@ -143,20 +143,9 @@ func crawl(site map[string][]byte, f func(path string, content []byte) error) er
 			return fmt.Errorf("error parsing links for page %s: %w", path, err)
 		}
 		for _, link := range links {
-			var nextPath string
-			var err error
-			if link[0] == '/' {
-				nextPath, err = url.JoinPath(link, "index.html")
-			} else if strings.HasSuffix(link, ".html") {
-				nextPath, err = url.JoinPath(filepath.Dir(path), link)
-			} else {
-				nextPath, err = url.JoinPath(filepath.Dir(path), link, "index.html")
-			}
+			nextPath, err := joinRelativeLink(path, link)
 			if err != nil {
-				return fmt.Errorf("error joining path %s with link %s: %w", path, link, err)
-			}
-			if nextPath[0] == '/' {
-				nextPath = nextPath[1:]
+				return fmt.Errorf("error joining link %s from %s: %w", link, path, err)
 			}
 			err = visit(nextPath)
 			if err != nil {
@@ -190,6 +179,23 @@ func relativeLinks(h []byte) ([]string, error) {
 	}
 	f(doc)
 	return links, nil
+}
+
+func joinRelativeLink(base, link string) (nextPath string, err error) {
+	if link[0] == '/' {
+		nextPath, err = url.JoinPath(link, "index.html")
+	} else if strings.HasSuffix(link, ".html") {
+		nextPath, err = url.JoinPath(filepath.Dir(base), link)
+	} else {
+		nextPath, err = url.JoinPath(filepath.Dir(base), link, "index.html")
+	}
+	if err != nil {
+		return "", err
+	}
+	if nextPath[0] == '/' {
+		nextPath = nextPath[1:]
+	}
+	return
 }
 
 // readSite reads the site from the given path and returns a map of the path to the contents of the file
