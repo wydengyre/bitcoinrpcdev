@@ -105,24 +105,43 @@ func TestGeneratedPages(t *testing.T) {
 	assert.Equal(t, expected, generated)
 }
 
-func TestGeneratedPagesReachable(t *testing.T) {
-	req := require.New(t)
-	remainingPages := make(map[string]struct{}, len(generatedSite))
-	for path := range generatedSite {
+func TestCrawl(t *testing.T) {
+	visited := make(map[string][]byte, len(generatedSite))
+	err := crawl(generatedSite, func(path string, content []byte) error {
+		visited[path] = content
+		return nil
+	})
+	require.NoError(t, err)
+	assert.Equal(t, generatedSite, visited)
+}
+
+func crawl(site map[string][]byte, f func(path string, content []byte) error) error {
+	remainingPages := make(map[string]struct{}, len(site))
+	for path := range site {
 		remainingPages[path] = struct{}{}
 	}
 
-	var visitLinks func(path string)
-	visitLinks = func(path string) {
+	var visit func(path string) error
+	visit = func(path string) error {
 		_, ok := remainingPages[path]
 		if !ok {
-			return
+			return nil
 		}
 		delete(remainingPages, path)
-		page, ok := generatedSite[path]
-		req.Truef(ok, "missing page %s, this should be impossible", path)
+		page, ok := site[path]
+		if !ok {
+			return fmt.Errorf("missing page %s, this should be impossible", path)
+		}
+
+		err := f(path, page)
+		if err != nil {
+			return fmt.Errorf("error processing %s: %w", path, err)
+		}
+
 		links, err := relativeLinks(page)
-		req.NoError(err)
+		if err != nil {
+			return fmt.Errorf("error parsing links for page %s: %w", path, err)
+		}
 		for _, link := range links {
 			var nextPath string
 			var err error
@@ -133,16 +152,20 @@ func TestGeneratedPagesReachable(t *testing.T) {
 			} else {
 				nextPath, err = url.JoinPath(filepath.Dir(path), link, "index.html")
 			}
-			req.NoError(err)
+			if err != nil {
+				return fmt.Errorf("error joining path %s with link %s: %w", path, link, err)
+			}
 			if nextPath[0] == '/' {
 				nextPath = nextPath[1:]
 			}
-			visitLinks(nextPath)
+			err = visit(nextPath)
+			if err != nil {
+				return fmt.Errorf("error visiting %s from %s: %w", nextPath, path, err)
+			}
 		}
+		return nil
 	}
-	visitLinks("index.html")
-
-	assert.Empty(t, remainingPages, "not all pages reachable")
+	return visit("index.html")
 }
 
 func relativeLinks(h []byte) ([]string, error) {
