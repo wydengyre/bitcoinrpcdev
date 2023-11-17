@@ -192,7 +192,6 @@ func downloadRelease(rootPath string, version releaseVersion) error {
 	}
 	defer silentClose(r.Body)
 
-	// TODO: special error for 404
 	if r.StatusCode == http.StatusNotFound {
 		return errorNotFound{release: releaseUrl}
 	}
