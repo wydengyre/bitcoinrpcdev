@@ -10,7 +10,7 @@ import (
 )
 
 //go:embed pico.min.css
-var css string
+var picoCss string
 
 type btcTemplate template.Template
 
@@ -24,7 +24,7 @@ func mustBtcTemplate(name string, content string) *btcTemplate {
 const charsetTag = `<meta charset="utf-8" />`
 const viewportTag = `<meta name="viewport" content="width=device-width, initial-scale=1">`
 
-var style = template.HTML(fmt.Sprintf(`<style>%s</style>`, css))
+var style = template.HTML(fmt.Sprintf(`<style>%s</style>`, picoCss))
 var headTags = charsetTag + viewportTag + style
 
 func (t *btcTemplate) render(d interface{}) ([]byte, error) {

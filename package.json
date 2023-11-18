@@ -4,5 +4,8 @@
   "version": "0.0.0",
   "dependencies": {
     "@picocss/pico": "^1.5.10"
+  },
+  "devDependencies": {
+    "purgecss": "^5.0.0"
   }
 }

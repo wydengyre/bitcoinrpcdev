@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/tdewolff/minify/v2"
-	"github.com/tdewolff/minify/v2/html"
+	min_html "github.com/tdewolff/minify/v2/html"
 	"log/slog"
 	"net/url"
 	"os"
@@ -24,7 +24,7 @@ type htmler interface {
 var m = minify.New()
 
 func init() {
-	m.AddFunc(mimeHtml, html.Minify)
+	m.AddFunc(mimeHtml, min_html.Minify)
 }
 
 // newFs creates a new site
@@ -39,15 +39,19 @@ func (s site) add(path string, hr htmler) error {
 	if err != nil {
 		return fmt.Errorf("failed to render html: %w", err)
 	}
-	ch, err := addCanonicalUrl(h, path)
+	h, err = purgeStyleCss(h)
+	if err != nil {
+		return fmt.Errorf("failed to minify css: %w", err)
+	}
+	h, err = addCanonicalUrl(h, path)
 	if err != nil {
 		return fmt.Errorf("failed to add canonical url: %w", err)
 	}
-	mh, err := minifyHtml(ch)
+	h, err = minifyHtml(h)
 	if err != nil {
 		return fmt.Errorf("failed to minify html: %w", err)
 	}
-	s[path] = mh
+	s[path] = h
 	return nil
 }
 
@@ -59,6 +63,10 @@ func addCanonicalUrl(html []byte, path string) ([]byte, error) {
 	tag := fmt.Sprintf(`<link rel="canonical" href="%s">`, canonicalUrl)
 	out := bytes.Replace(html, []byte(`</head>`), []byte(tag+`</head>`), 1)
 	return out, nil
+}
+
+func minifyHtml(h []byte) ([]byte, error) {
+	return m.Bytes(mimeHtml, h)
 }
 
 // write writes the site to the filesystem
@@ -80,8 +88,4 @@ func (s site) write(rootPath string) error {
 		slog.Info("wrote", "path", outPath)
 	}
 	return nil
-}
-
-func minifyHtml(html []byte) ([]byte, error) {
-	return m.Bytes(mimeHtml, html)
 }
