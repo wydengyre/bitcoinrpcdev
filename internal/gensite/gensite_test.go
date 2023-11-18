@@ -20,7 +20,7 @@ import (
 // generatedSite is a map of the generated path to the contents of the file
 var generatedSite map[string][]byte
 
-func TestMain(m *testing.M) {
+func init() {
 	panicOnErr := func(err error) {
 		if err != nil {
 			panic(err)
@@ -64,7 +64,6 @@ func TestMain(m *testing.M) {
 		},
 	}
 
-	var exitCode int
 	func() {
 		defer cleanup()
 		dbBytes, err := db.Marshal()
@@ -74,8 +73,6 @@ func TestMain(m *testing.M) {
 		generatedSite, err = readSite(webDir)
 		panicOnErr(err)
 	}()
-	exitCode = m.Run()
-	os.Exit(exitCode)
 }
 
 // test the pages we expect are generated
