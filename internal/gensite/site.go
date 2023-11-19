@@ -51,6 +51,10 @@ func (s site) add(path string, hr htmler) error {
 	return nil
 }
 
+func (s site) addRaw(path string, content []byte) {
+	s[path] = content
+}
+
 func addCanonicalUrl(html []byte, path string) ([]byte, error) {
 	canonicalUrl, err := url.JoinPath(canonicalHome, path)
 	if err != nil {

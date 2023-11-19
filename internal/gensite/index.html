@@ -4,6 +4,7 @@
     <title>Bitcoin Core RPC</title>
     <meta name="description" content="Bitcoin Core RPC command documentation">
     {{.headTags}}
+    <link rel="stylesheet" href="pico.min.css">
 </head>
 <body>
 {{template `nav`}}
@@ -12,9 +13,9 @@
 </header>
 <main class="container">
   <ul>
-    <li>Latest: <a href="/{{.Latest}}">{{.Latest}}</a></li>
+    <li>Latest: <a href="{{.Latest}}">{{.Latest}}</a></li>
     {{range $version := .Versions}}
-    <li><a href="/{{$version}}/">{{$version}}</a></li>
+    <li><a href="{{$version}}/">{{$version}}</a></li>
     {{end}}
   </ul>
 </main>

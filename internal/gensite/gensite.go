@@ -2,9 +2,13 @@ package gensite
 
 import (
 	"bitcoinrpcschema/internal/bitcoind"
+	_ "embed"
 	"fmt"
 	"slices"
 )
+
+//go:embed pico.min.css
+var picoCss []byte
 
 func Gen(db []byte, webPath string) error {
 	rpcDb, err := bitcoind.ReadDb(db)
@@ -58,6 +62,8 @@ func Gen(db []byte, webPath string) error {
 	if err != nil {
 		return fmt.Errorf("failed to add index to site: %w", err)
 	}
+
+	site.addRaw("pico.min.css", picoCss)
 
 	err = site.write(webPath)
 	if err != nil {

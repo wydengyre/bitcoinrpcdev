@@ -93,6 +93,7 @@ func TestGeneratedPages(t *testing.T) {
 		"2.3.4/section2/cmd4/index.html",
 		"2.3.4/section2/index.html",
 		"index.html",
+		"pico.min.css",
 	}
 	generated := make([]string, 0, len(generatedSite))
 	for path := range generatedSite {
@@ -103,13 +104,19 @@ func TestGeneratedPages(t *testing.T) {
 }
 
 func TestCrawl(t *testing.T) {
-	visited := make(map[string][]byte, len(generatedSite))
+	generatedHtml := make(map[string][]byte, len(generatedSite)-1)
+	for path, content := range generatedSite {
+		if strings.HasSuffix(path, ".html") {
+			generatedHtml[path] = content
+		}
+	}
+	visited := make(map[string][]byte, len(generatedHtml))
 	err := crawl(generatedSite, func(path string, content []byte) error {
 		visited[path] = content
 		return nil
 	})
 	require.NoError(t, err)
-	assert.Equal(t, generatedSite, visited)
+	assert.Equal(t, generatedHtml, visited)
 }
 
 func crawl(site map[string][]byte, f func(path string, content []byte) error) error {
