@@ -39,10 +39,6 @@ func (s site) add(path string, hr htmler) error {
 	if err != nil {
 		return fmt.Errorf("failed to render html: %w", err)
 	}
-	h, err = purgeStyleCss(h)
-	if err != nil {
-		return fmt.Errorf("failed to minify css: %w", err)
-	}
 	h, err = addCanonicalUrl(h, path)
 	if err != nil {
 		return fmt.Errorf("failed to add canonical url: %w", err)

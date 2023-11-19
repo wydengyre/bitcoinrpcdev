@@ -7,9 +7,21 @@ import (
 )
 
 func Gen(db []byte, webPath string) error {
+	site, err := GenSite(db)
+	if err != nil {
+		return fmt.Errorf("failed to generate site: %w", err)
+	}
+	err = site.write(webPath)
+	if err != nil {
+		return fmt.Errorf("failed to write site: %w", err)
+	}
+	return nil
+}
+
+func GenSite(db []byte) (site, error) {
 	rpcDb, err := bitcoind.ReadDb(db)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	site := newSite()
@@ -25,7 +37,7 @@ func Gen(db []byte, webPath string) error {
 				}
 				err := site.add(p, c)
 				if err != nil {
-					return fmt.Errorf("failed to add command %s to site: %w", cmd.Name, err)
+					return nil, fmt.Errorf("failed to add command %s to site: %w", cmd.Name, err)
 				}
 			}
 			p := fmt.Sprintf("%s/%s/index.html", rv, sec)
@@ -36,7 +48,7 @@ func Gen(db []byte, webPath string) error {
 			}
 			err := site.add(p, s)
 			if err != nil {
-				return fmt.Errorf("failed to add section %s to site: %w", sec, err)
+				return nil, fmt.Errorf("failed to add section %s to site: %w", sec, err)
 			}
 		}
 		name := rv.String()
@@ -45,25 +57,20 @@ func Gen(db []byte, webPath string) error {
 		v := version{name, sections}
 		err := site.add(p, &v)
 		if err != nil {
-			return fmt.Errorf("failed to add version %s to site: %w", rv.String(), err)
+			return nil, fmt.Errorf("failed to add version %s to site: %w", rv.String(), err)
 		}
 	}
 
 	idx := &index{}
 	idx.Latest, idx.Versions, err = versionsDescending(rpcDb)
 	if err != nil {
-		return fmt.Errorf("failed to get versions: %w", err)
+		return nil, fmt.Errorf("failed to get versions: %w", err)
 	}
 	err = site.add("index.html", idx)
 	if err != nil {
-		return fmt.Errorf("failed to add index to site: %w", err)
+		return nil, fmt.Errorf("failed to add index to site: %w", err)
 	}
-
-	err = site.write(webPath)
-	if err != nil {
-		return fmt.Errorf("failed to write site: %w", err)
-	}
-	return nil
+	return site, nil
 }
 
 func cmdNames(cmds []bitcoind.Command) []string {

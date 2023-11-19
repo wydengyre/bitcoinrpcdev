@@ -3,10 +3,14 @@ package gensite
 import (
 	_ "embed"
 	"fmt"
+	"html/template"
 )
 
 //go:embed index.html
 var indexHtml string
+
+//go:embed index.css
+var indexCss string
 
 type index struct {
 	Latest   string
@@ -16,7 +20,9 @@ type index struct {
 var indexTmpl = mustBtcTemplate("index", indexHtml)
 
 func (i *index) html() ([]byte, error) {
-	rendered, err := indexTmpl.render(i)
+	renderMap := structToMap(i)
+	renderMap["css"] = template.CSS(indexCss)
+	rendered, err := indexTmpl.render(renderMap)
 	if err != nil {
 		e := fmt.Errorf("failed to render index html: %w", err)
 		return nil, e

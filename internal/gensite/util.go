@@ -3,14 +3,10 @@ package gensite
 import (
 	"bytes"
 	_ "embed"
-	"fmt"
 	"html/template"
 	"reflect"
 	"time"
 )
-
-//go:embed pico.min.css
-var picoCss string
 
 type btcTemplate template.Template
 
@@ -24,8 +20,7 @@ func mustBtcTemplate(name string, content string) *btcTemplate {
 const charsetTag = `<meta charset="utf-8" />`
 const viewportTag = `<meta name="viewport" content="width=device-width, initial-scale=1">`
 
-var style = template.HTML(fmt.Sprintf(`<style>%s</style>`, picoCss))
-var headTags = charsetTag + viewportTag + style
+var headTags = template.HTML(charsetTag + viewportTag)
 
 func (t *btcTemplate) render(d interface{}) ([]byte, error) {
 	m, ok := d.(map[string]interface{})

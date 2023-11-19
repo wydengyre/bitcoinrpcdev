@@ -1,5 +1,8 @@
 #!/usr/bin/env just --justfile
 
+purgecss:
+    go run ./cmd/purgecss node_modules/@picocss/pico/css/pico.min.css internal/gensite
+
 copy-css:
     cp node_modules/@picocss/pico/css/pico.min.css internal/gensite
 

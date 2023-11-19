@@ -4,6 +4,7 @@ async function runPurgeCSS(htmlContent, cssContent) {
     const purgeCSSResult = await new PurgeCSS().purge({
         content: [{ raw: htmlContent, extension: 'html' }],
         css: [{ raw: cssContent }],
+        safelist: [':where', ':is']
     });
 
     if (purgeCSSResult.length > 0 && purgeCSSResult[0].css) {
