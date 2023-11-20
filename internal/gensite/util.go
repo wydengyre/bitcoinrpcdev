@@ -51,6 +51,10 @@ func structToMap(item interface{}) map[string]interface{} {
 		fieldName := itemValue.Type().Field(i).Name
 		// Get the field value
 		fieldValue := itemValue.Field(i).Interface()
+		if fieldValue == nil {
+			// this will only happen if the field type was nil
+			continue
+		}
 		// Add the field to the map
 		result[fieldName] = fieldValue
 	}
