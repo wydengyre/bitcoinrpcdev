@@ -13,7 +13,7 @@
 </header>
 <main class="container">
   <ul>
-    <li>Latest: <a href="{{.Latest}}">{{.Latest}}</a></li>
+    <li>Latest: <a href="{{.Latest}}/">{{.Latest}}</a></li>
     {{range $version := .Versions}}
     <li><a href="{{$version}}/">{{$version}}</a></li>
     {{end}}
