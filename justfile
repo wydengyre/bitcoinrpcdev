@@ -1,5 +1,7 @@
 #!/usr/bin/env just --justfile
 
+ci-test: install-node-deps copy-css test
+
 copy-css:
     cp node_modules/@picocss/pico/css/pico.min.css internal/gensite
 
@@ -10,8 +12,11 @@ createdb-dev:
     docker run --name bitcoinrpc bitcoinrpc
     docker cp bitcoinrpc:/app/rpc.db .
 
+install-node-deps:
+    npm install --frozen-lockfile
+
 test:
-    go test -v ./internal/...
+    go test -mod=readonly -v ./...
 
 update:
     go get -u
