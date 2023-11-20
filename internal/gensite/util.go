@@ -18,8 +18,10 @@ func mustBtcTemplate(name string, content string) *btcTemplate {
 
 const charsetTag = `<meta charset="utf-8" />`
 const viewportTag = `<meta name="viewport" content="width=device-width, initial-scale=1">`
+const iconTags = `<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-icon.png">`
 
-var headTags = template.HTML(charsetTag + viewportTag)
+var headTags = template.HTML(charsetTag + viewportTag + iconTags)
 
 func (t *btcTemplate) render(d interface{}) ([]byte, error) {
 	m, ok := d.(map[string]interface{})
