@@ -12,6 +12,9 @@ createdb-dev:
     docker run --name bitcoinrpc bitcoinrpc
     docker cp bitcoinrpc:/app/rpc.db .
 
+www-publish:
+    npx wrangler pages deploy www
+
 www-gen-all: www-copy-static www-gen-html
 
 www-copy-static:
