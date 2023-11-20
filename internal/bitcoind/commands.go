@@ -100,7 +100,12 @@ func getCommands(c *rpcclient.Client) (map[string][]string, error) {
 			sectionName = strings.ToLower(matches[1])
 			section = make([]string, 0, 1)
 		} else if len(line) > 1 && line[0] >= 'a' && line[0] <= 'z' {
-			commandName := strings.Split(line, " ")[0]
+			split := strings.Split(line, " ")
+			if len(split) == 0 {
+				e := fmt.Errorf("could not parse command %s", line)
+				return nil, e
+			}
+			commandName := split[0]
 			section = append(section, commandName)
 		}
 	}
