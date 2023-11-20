@@ -12,6 +12,14 @@ createdb-dev:
     docker run --name bitcoinrpc bitcoinrpc
     docker cp bitcoinrpc:/app/rpc.db .
 
+www-gen-all: www-copy-static www-gen-html
+
+www-copy-static:
+    cp -r static/* www/
+
+www-gen-html:
+    go run ./cmd/gensite
+
 install-node-deps:
     npm install --frozen-lockfile
 
