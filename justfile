@@ -15,6 +15,9 @@ createdb-dev:
 install-node-deps:
     npm install --frozen-lockfile
 
+lint:
+    golangci-lint run
+
 test:
     go test -mod=readonly -v ./...
 
