@@ -109,6 +109,7 @@ func getCommands(c *rpcclient.Client) (map[string][]string, error) {
 			section = append(section, commandName)
 		}
 	}
+	commands[sectionName] = section
 	return commands, nil
 }
 
