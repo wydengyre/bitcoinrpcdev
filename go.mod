@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/btcsuite/btcd v0.23.4
 	github.com/go-git/go-git/v5 v5.10.0
-	github.com/panjf2000/ants/v2 v2.8.2
+	github.com/panjf2000/ants/v2 v2.9.0
 	github.com/stretchr/testify v1.8.4
 	github.com/tdewolff/minify/v2 v2.20.7
 	golang.org/x/net v0.18.0
