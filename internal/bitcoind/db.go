@@ -86,15 +86,21 @@ func mkDb(daemonPath string) (RpcDb, error) {
 }
 
 func getRpcInfo(versionPath string) (ReleaseVersion, map[string][]Command, error) {
+	hiddenCommands, err := getHiddenCommands(versionPath)
+	if err != nil {
+		e := fmt.Errorf("error getting hidden commands for bitcoind %s: %w", versionPath, err)
+		return ReleaseVersion{}, nil, e
+	}
+
 	bitcoindPath := path.Join(versionPath, "bin", "bitcoind")
-	rv, cmds, err := GetDaemonCommands(bitcoindPath)
+	rv, cmds, err := GetDaemonCommands(bitcoindPath, hiddenCommands)
 	if err != nil {
 		err = fmt.Errorf("error getting RPC info for bitcoind %s: %w", bitcoindPath, err)
 	}
 	return rv, cmds, err
 }
 
-func GetDaemonCommands(bitcoindPath string) (ReleaseVersion, map[string][]Command, error) {
+func GetDaemonCommands(bitcoindPath string, hiddenCommands []string) (ReleaseVersion, map[string][]Command, error) {
 	conf, err := startBitcoind(bitcoindPath)
 	if err != nil {
 		return ReleaseVersion{}, nil, err
@@ -108,7 +114,7 @@ func GetDaemonCommands(bitcoindPath string) (ReleaseVersion, map[string][]Comman
 		return ReleaseVersion{}, nil, e
 	}
 
-	cmds, err := getCommandHelps(c)
+	cmds, err := getCommandHelps(c, hiddenCommands)
 	if err != nil {
 		e := fmt.Errorf("error getting commands for bitcoind %s: %w", bitcoindPath, err)
 		return ReleaseVersion{}, nil, e

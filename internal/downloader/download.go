@@ -8,6 +8,7 @@ import (
 	"github.com/panjf2000/ants/v2"
 	"golang.org/x/net/html"
 	"io"
+	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -16,8 +17,6 @@ import (
 	"strconv"
 	"sync"
 )
-
-const binUrl = "https://bitcoincore.org/bin/"
 
 // how many major versions to keep
 const keepVersions = 3
@@ -91,7 +90,7 @@ func parseReleaseVersion(s string) (releaseVersion, error) {
 	return releaseVersion, nil
 }
 
-func Get(rootPath string) error {
+func Get(rootPath, binUrl, gitUrl string) error {
 	r, err := http.Get(binUrl)
 	if err != nil {
 		return err
@@ -115,8 +114,7 @@ func Get(rootPath string) error {
 							latestVersion = v
 						}
 					} else {
-						// TODO: debug log this
-						fmt.Printf("error parsing release version: %s\n", err)
+						slog.Debug(fmt.Sprintf("error parsing release version: %s\n", err))
 					}
 				}
 			}
@@ -133,21 +131,23 @@ func Get(rootPath string) error {
 		}
 	}
 
-	fmt.Printf("versions to download: %v\n", keptVersions)
+	slog.Info(fmt.Sprintf("versions to download: %v\n", keptVersions))
 
 	var wg sync.WaitGroup
+	downloadedVersions := make([]releaseVersion, 0, len(keptVersions))
 	errs := make([]error, 0, len(keptVersions))
 	p, err := ants.NewPoolWithFunc(maxDownloadStreams, func(i interface{}) {
 		defer wg.Done()
-		err := downloadRelease(rootPath, i.(releaseVersion))
+		err := downloadRelease(rootPath, binUrl, i.(releaseVersion))
 		_, ok := err.(errorNotFound)
 		if ok {
-			fmt.Printf("release unavailable: %s\n", i.(releaseVersion))
+			slog.Info(fmt.Sprintf("release unavailable: %s\n", i.(releaseVersion)))
 		} else if err != nil {
 			e := fmt.Errorf("error downloading release: %w", err)
 			errs = append(errs, e)
 		} else {
-			fmt.Printf("downloaded version %s\n", i)
+			slog.Info(fmt.Sprintf("downloaded version %s\n", i))
+			downloadedVersions = append(downloadedVersions, i.(releaseVersion))
 		}
 	})
 	if err != nil {
@@ -156,7 +156,7 @@ func Get(rootPath string) error {
 	defer p.Release()
 	for _, version := range keptVersions {
 		wg.Add(1)
-		fmt.Printf("downloading version %s\n", version)
+		slog.Info(fmt.Sprintf("downloading version %s\n", version))
 		err := p.Invoke(version)
 		if err != nil {
 			return fmt.Errorf("error invoking download pool: %w", err)
@@ -168,7 +168,7 @@ func Get(rootPath string) error {
 		return fmt.Errorf("errors downloading releases: %w", joined)
 	}
 
-	return nil
+	return DownloadGitRpcs(gitUrl, downloadedVersions)
 }
 
 type errorNotFound struct {
@@ -181,7 +181,7 @@ func (e errorNotFound) Error() string {
 
 var bitcoindPathRe = regexp.MustCompile(`^bitcoin-\d+\.\d+(?:\.\d+)?/bin/bitcoind$`)
 
-func downloadRelease(rootPath string, version releaseVersion) error {
+func downloadRelease(rootPath, binUrl string, version releaseVersion) error {
 	plat := "x86_64-linux-gnu"
 	if runtime.GOARCH == "arm64" {
 		plat = "aarch64-linux-gnu"
@@ -222,7 +222,7 @@ func downloadRelease(rootPath string, version releaseVersion) error {
 			continue
 		}
 
-		fmt.Println("uncompressing " + header.Name)
+		slog.Info("uncompressing " + header.Name)
 
 		filePath := fmt.Sprintf("%s/%s", rootPath, header.Name)
 		dirPath := filePath
