@@ -54,11 +54,12 @@ func atou(s string) (uint, error) {
 	return uint(i), nil
 }
 
-func getCommandHelps(c *rpcclient.Client) (map[string][]Command, error) {
+func getCommandHelps(c *rpcclient.Client, hiddenCommands []string) (map[string][]Command, error) {
 	cmds, err := getCommands(c)
 	if err != nil {
 		return nil, err
 	}
+	cmds["hidden"] = hiddenCommands
 
 	helps := make(map[string][]Command)
 	for section, commands := range cmds {
