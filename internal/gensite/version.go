@@ -17,6 +17,10 @@ type version struct {
 var versionTmpl = mustBtcTemplate("version", versionHtml)
 
 func (v *version) html() ([]byte, error) {
+	for _, cmds := range v.Sections {
+		slices.Sort(cmds)
+	}
+
 	toRender := make(map[string]interface{}, 2)
 	toRender["Version"] = v
 	toRender["SectionsAlpha"] = alphaKeys(v.Sections)
