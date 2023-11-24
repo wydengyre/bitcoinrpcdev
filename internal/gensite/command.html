@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bitcoin Core {{.Version}} RPC: {{.Name}}</title>
-    <meta name="description" content="Bitcoin Core {{.Version}} RPC command documentation: {{.Name}}">
+    <title>Bitcoin Core {{.Command.Version}} RPC: {{.Command.Name}}</title>
+    <meta name="description" content="Bitcoin Core {{.Command.Version}} RPC command documentation: {{.Command.Name}}">
     {{.headTags}}
     <link rel="stylesheet" href="../../../pico.min.css">
 </head>
@@ -10,12 +10,21 @@
 {{template `nav`}}
 <header class="container">
     <hgroup>
-        <h1>{{.Name}} (<a href="../">{{.Section}}</a> command)</h1>
-        <h2>Bitcoin Core <a href="../../">{{.Version}}</a> RPC</h2>
+        <h1>{{.Command.Name}} (<a href="../">{{.Command.Section}}</a> command)</h1>
+        <h2>Bitcoin Core <a href="../../">{{.Command.Version}}</a> RPC</h2>
     </hgroup>
 </header>
 <main class="container">
-    <pre style="white-space: pre-wrap">{{.Description}}</pre>
+    <pre style="white-space: pre-wrap">{{.ParsedDescription.Usage}}</pre>
+    {{range $p := .ParsedDescription.Explanation}}
+    <p>{{$p}}</p>
+    {{end}}
+    {{if .ParsedDescription.Arguments}}
+    <h3>Arguments</h3>
+    <pre style="white-space: pre-wrap">{{.ParsedDescription.Arguments}}</pre>
+    {{end}}
+    <h3>Result</h3>
+    <pre style="white-space: pre-wrap">{{.ParsedDescription.Result}}</pre>
 </main>
 {{template `footer` .}}
 </body>
