@@ -23,6 +23,7 @@ type parsedDescription struct {
 	Explanation []string
 	Arguments   string
 	Result      string
+	Examples    string
 }
 
 type commandTmplData struct {
@@ -84,15 +85,26 @@ func parseDescription(description string) (*parsedDescription, error) {
 			b.WriteString(t)
 			b.WriteString("\n")
 		}
-		p.Arguments = b.String()
+		p.Arguments = strings.TrimRight(b.String(), "\n")
 	}
+
+	b = strings.Builder{}
+	for s.Scan() {
+		t := s.Text()
+		if strings.HasPrefix(t, "Examples") {
+			break
+		}
+		b.WriteString(s.Text())
+		b.WriteString("\n")
+	}
+	p.Result = strings.TrimRight(b.String(), "\n")
 
 	b = strings.Builder{}
 	for s.Scan() {
 		b.WriteString(s.Text())
 		b.WriteString("\n")
 	}
-	p.Result = b.String()
+	p.Examples = strings.TrimRight(b.String(), "\n")
 
 	return p, s.Err()
 }

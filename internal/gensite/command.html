@@ -23,8 +23,14 @@
     <h3>Arguments</h3>
     <pre style="white-space: pre-wrap">{{.ParsedDescription.Arguments}}</pre>
     {{end}}
+    {{ if .ParsedDescription.Result}}
     <h3>Result</h3>
     <pre style="white-space: pre-wrap">{{.ParsedDescription.Result}}</pre>
+    {{end}}
+    {{ if .ParsedDescription.Examples}}
+    <h3>Examples</h3>
+    <pre style="white-space: pre-wrap">{{.ParsedDescription.Examples}}</pre>
+    {{end}}
 </main>
 {{template `footer` .}}
 </body>
