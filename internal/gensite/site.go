@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 const canonicalHome = `https://bitcoinrpc.dev/`
@@ -56,7 +57,8 @@ func (s site) addRaw(path string, content []byte) {
 }
 
 func addCanonicalUrl(html []byte, path string) ([]byte, error) {
-	canonicalUrl, err := url.JoinPath(canonicalHome, path)
+	canonicalPath := strings.TrimSuffix(path, "index.html")
+	canonicalUrl, err := url.JoinPath(canonicalHome, canonicalPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to join canonical url: %w", err)
 	}
