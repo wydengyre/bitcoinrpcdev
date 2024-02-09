@@ -24,7 +24,7 @@ www-gen-html:
     go run ./cmd/gensite
 
 install-node-deps:
-    npm install --frozen-lockfile
+    npm ci
 
 lint:
     golangci-lint run
