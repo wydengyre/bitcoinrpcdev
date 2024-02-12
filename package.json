@@ -3,7 +3,7 @@
   "name": "bitcoinrpcdev",
   "version": "0.0.0",
   "dependencies": {
-    "@picocss/pico": "^1.5.11"
+    "@picocss/pico": "^2.0.0"
   },
   "devDependencies": {
     "wrangler": "^3.28.1"
