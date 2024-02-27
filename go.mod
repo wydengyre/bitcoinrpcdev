@@ -8,7 +8,7 @@ require (
 	github.com/go-git/go-git/v5 v5.11.0
 	github.com/panjf2000/ants/v2 v2.9.0
 	github.com/stretchr/testify v1.8.4
-	github.com/tdewolff/minify/v2 v2.20.17
+	github.com/tdewolff/minify/v2 v2.20.18
 	golang.org/x/net v0.21.0
 )
 
