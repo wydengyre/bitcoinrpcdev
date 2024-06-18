@@ -6,7 +6,7 @@ require (
 	github.com/btcsuite/btcd v0.24.0
 	github.com/go-git/go-billy/v5 v5.5.0
 	github.com/go-git/go-git/v5 v5.12.0
-	github.com/panjf2000/ants/v2 v2.9.1
+	github.com/panjf2000/ants/v2 v2.10.0
 	github.com/stretchr/testify v1.9.0
 	github.com/tdewolff/minify/v2 v2.20.34
 	golang.org/x/net v0.26.0
@@ -40,6 +40,7 @@ require (
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
+	golang.org/x/sync v0.5.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/tools v0.15.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
