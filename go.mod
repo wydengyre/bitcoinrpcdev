@@ -3,7 +3,7 @@ module bitcoinrpcschema
 go 1.21
 
 require (
-	github.com/btcsuite/btcd v0.24.0
+	github.com/btcsuite/btcd v0.24.2
 	github.com/go-git/go-billy/v5 v5.5.0
 	github.com/go-git/go-git/v5 v5.12.0
 	github.com/panjf2000/ants/v2 v2.10.0
