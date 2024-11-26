@@ -7,7 +7,7 @@ require (
 	github.com/go-git/go-billy/v5 v5.6.0
 	github.com/go-git/go-git/v5 v5.12.0
 	github.com/panjf2000/ants/v2 v2.10.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	github.com/tdewolff/minify/v2 v2.21.1
 	golang.org/x/net v0.30.0
 )
