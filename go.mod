@@ -8,7 +8,7 @@ require (
 	github.com/go-git/go-git/v5 v5.12.0
 	github.com/panjf2000/ants/v2 v2.10.0
 	github.com/stretchr/testify v1.10.0
-	github.com/tdewolff/minify/v2 v2.21.1
+	github.com/tdewolff/minify/v2 v2.21.2
 	golang.org/x/net v0.30.0
 )
 
@@ -36,7 +36,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sergi/go-diff v1.3.2-0.20230802210424-5b0b94c5c0d3 // indirect
 	github.com/skeema/knownhosts v1.2.2 // indirect
-	github.com/tdewolff/parse/v2 v2.7.18 // indirect
+	github.com/tdewolff/parse/v2 v2.7.19 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	golang.org/x/crypto v0.28.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
