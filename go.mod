@@ -9,7 +9,7 @@ require (
 	github.com/panjf2000/ants/v2 v2.11.1
 	github.com/stretchr/testify v1.10.0
 	github.com/tdewolff/minify/v2 v2.21.3
-	golang.org/x/net v0.35.0
+	golang.org/x/net v0.36.0
 )
 
 require (
