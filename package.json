@@ -6,6 +6,6 @@
     "@picocss/pico": "^2.1.1"
   },
   "devDependencies": {
-    "wrangler": "^4.3.0"
+    "wrangler": "^4.4.0"
   }
 }
