@@ -1,6 +1,7 @@
 module bitcoinrpcschema
 
 go 1.23.2
+toolchain go1.24.1
 
 require (
 	github.com/btcsuite/btcd v0.24.3-0.20241011125836-24eb815168f4
@@ -9,7 +10,7 @@ require (
 	github.com/panjf2000/ants/v2 v2.11.2
 	github.com/stretchr/testify v1.10.0
 	github.com/tdewolff/minify/v2 v2.22.4
-	golang.org/x/net v0.37.0
+	golang.org/x/net v0.38.0
 )
 
 require (
