@@ -10,7 +10,7 @@ require (
 	github.com/go-git/go-git/v5 v5.16.0
 	github.com/panjf2000/ants/v2 v2.11.3
 	github.com/stretchr/testify v1.10.0
-	github.com/tdewolff/minify/v2 v2.23.4
+	github.com/tdewolff/minify/v2 v2.23.5
 	golang.org/x/net v0.40.0
 )
 
