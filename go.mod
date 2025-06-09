@@ -7,7 +7,7 @@ toolchain go1.24.1
 require (
 	github.com/btcsuite/btcd v0.24.3-0.20241011125836-24eb815168f4
 	github.com/go-git/go-billy/v5 v5.6.2
-	github.com/go-git/go-git/v5 v5.16.1
+	github.com/go-git/go-git/v5 v5.16.2
 	github.com/panjf2000/ants/v2 v2.11.3
 	github.com/stretchr/testify v1.10.0
 	github.com/tdewolff/minify/v2 v2.23.8
