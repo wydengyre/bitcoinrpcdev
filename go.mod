@@ -11,7 +11,7 @@ require (
 	github.com/panjf2000/ants/v2 v2.11.3
 	github.com/stretchr/testify v1.11.0
 	github.com/tdewolff/minify/v2 v2.23.8
-	golang.org/x/net v0.41.0
+	golang.org/x/net v0.43.0
 )
 
 require (
@@ -40,9 +40,9 @@ require (
 	github.com/skeema/knownhosts v1.3.1 // indirect
 	github.com/tdewolff/parse/v2 v2.8.1 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	golang.org/x/crypto v0.39.0 // indirect
+	golang.org/x/crypto v0.41.0 // indirect
 	golang.org/x/sync v0.11.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
